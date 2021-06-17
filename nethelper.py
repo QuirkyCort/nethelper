@@ -901,16 +901,6 @@ if __name__ == '__main__':
                     groups.append(line)
     else:
         groups = args.groups
-
-    if args.names:
-        net_server._RANDOM_NAMES = []
-        with open(args.file, 'r') as file:
-            for line in file.readlines():
-                line = line.strip()
-                if len(line) > 0 and line[0] != '#':
-                    net_server._RANDOM_NAMES.append(line)
-        random.shuffle(net_server._RANDOM_NAMES)
-        print('  Read from file: ' + str(len(net_server._RANDOM_NAMES)) + ' names')
         
     groups_string = ''
     for group in groups:
@@ -922,6 +912,16 @@ if __name__ == '__main__':
     net_server.groups = args.groups
 
     print('Server listening')
+
+    if args.names:
+        net_server._RANDOM_NAMES = []
+        with open(args.file, 'r') as file:
+            for line in file.readlines():
+                line = line.strip()
+                if len(line) > 0 and line[0] != '#':
+                    net_server._RANDOM_NAMES.append(line)
+        random.shuffle(net_server._RANDOM_NAMES)
+        print('  Read from file: ' + str(len(net_server._RANDOM_NAMES)) + ' names')
 
     display_timeout = time.time() + 5
     while True:
