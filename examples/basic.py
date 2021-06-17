@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import pgzrun
-from nethelper import *
+from nethelper import NetNode
 
 WIDTH = 800
 HEIGHT = 600
@@ -18,7 +18,8 @@ tank = Actor('tank_blue')
 players = {}
 
 # Connect to the message relay server
-net = NetNode('localhost', NAME, 'net_demo')
+net = NetNode()
+net.connect('localhost', NAME, 'net_demo')
 
 def add_player(name):
     players[name] = {

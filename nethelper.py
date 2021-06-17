@@ -162,25 +162,9 @@ class Net:
 #
 class NetNode(Net):
     '''
-    The NetNode object is used to communicate with each other through a
-    running server.
-    
-    If host, name, and group is provided, it will connect to the server
-    automatically. Else, you'll need to run "connect" after object
-    creation.
-
-    Args:
-        host: A string specifying the IP or domain name of the server to
-          connect to.
-        name: A string providing the name of this node. You can use
-          anything here.
-        group: A string specifying the group that this node belongs to. It
-          must be a valid group that the server recognises.
-        port: An integer specifying the server port.
-        wait: If True, wait until connected or until timeout is reached
-          If False, return immediately.
-        timeout: If still not connected after this time, exit this
-          function.
+    The NetNode object is used to communicate between nodes.
+    You'll need to run "connect" after object creation to connect to a
+    server.
 
     Returns:
         A NetNode object.
@@ -189,7 +173,7 @@ class NetNode(Net):
     IN_BUFFER_LIMIT = 102400
     OUT_BUFFER_LIMIT = 102400
 
-    def __init__(self, host=None, name=None, group=None, port=None, wait=True, timeout=5):
+    def __init__(self):
         self.inBuf = b''
         self.outBuf = b''
         self.heartBeatTime = time.time()
@@ -198,19 +182,17 @@ class NetNode(Net):
         self.peers = OrderedDict()
         self.my_addr = self.UNKNOWN_ADDR
 
-        if host != None and name != None and group != None:
-            self.connect(host, name, group, port, wait, timeout)
-
     def connect(self, host, name, group, port=None, wait=True, timeout=5):
         '''
-        Connect to the server. This is only needed if connection was not
-        carried out during initialization.
+        Connect to the server.
         
         Args:
             host: A string specifying the IP or domain name of the server
               to connect to.
             name: A string providing the name of this node. You can use
-              anything here.
+              anything here. If a blank string is provided, the server will
+              assign you a random name that you can later read using
+              get_name().
             group: A string specifying the group that this node belongs to.
               It must be a valid group that the server recognises.
             port: An integer specifying the server port.
@@ -449,6 +431,14 @@ class NetNode(Net):
         return list(self.peers.keys())
 
     def get_name(self):
+        '''
+        Get the name of this node.
+        This is used to find out your own node name if you are requesting
+        the server to issue you a random name.
+
+        Returns:
+            A string with your node name.
+        '''
         return self.name
     
     def disconnect(self):
@@ -881,7 +871,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--interface', help='interface address to bind to (default is all interfaces)')
     parser.add_argument('-p', '--port', help='port to bind to (default is ' + str(Net.DEFAULT_PORT) + ')')
-    parser.add_argument('-n', '--names', help='file containing random names (default is "randnames"). If unspecified, a built-in list of names will be used.')
+    parser.add_argument('-n', '--names', help='file containing random names. If unspecified, a built-in list of names will be used.')
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-f', '--file', help='File providing list of group. Each group should be on its own line. Lines starting with # are ignored. Leading and trailing whitepspaces are ignored.')
     group.add_argument('-g', '--groups', nargs='+', help='List of group separated by a space.')

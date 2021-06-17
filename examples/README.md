@@ -3,7 +3,7 @@
 For all of these examples, you'll need to...
 * Install Pygame Zero
 * Put nethelper.py in the same directory as the example game
-* Run nethelper.py. This will start a message relay server.
+* Start a message relay server with the group "net_demo" (ie. run ```python3 nethelper.py -g net_demo```).
 * Change the SERVER name in the example game to point to the address of your message relay server.
 
 ## basic.py

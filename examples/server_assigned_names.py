@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import pgzrun
-from nethelper import *
+from nethelper import NetNode
 
 WIDTH = 800
 HEIGHT = 600
@@ -13,7 +13,8 @@ players = {}
 # Connect to the message relay server
 # By setting name to a blank string '', we request the server to
 # assign a random name to us
-net = NetNode('localhost', '', 'net_demo')
+net = NetNode()
+net.connect('localhost', '', 'net_demo')
 
 peers = net.get_peers()
 # First player is host
