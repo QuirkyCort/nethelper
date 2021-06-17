@@ -59,13 +59,13 @@ net.connect('localhost', 'foo', 'net_demo')
 Now your game should be connected to the server as a node.
 Every node in the same group can talk to each other via the message relay server.
 
-Here I'm using **localhost** as the server address, but that will only work if the game is running on the same computer as the server.
+**localhost** is what I'm using here as the server address, but that will only work if the game is running on the same computer as the server.
 If the game is not running on the same computer as the server, you'll want to replace **localhost** with the IP address or domain name of the server.
 
-The **foo** is the name that this node is identifying itself as.
+**foo** is the name that this node is identifying itself as.
 You can use any string as a name, as long as every node in the same group has a unique name.
 
-The **net_demo** is the group that you are connecting to.
+**net_demo** is the group that I am are connecting to.
 The server must be configured to recognize this group, and nodes can only communicate with other computers in the same group.
 
 In your **update()** function, you should start with a...
