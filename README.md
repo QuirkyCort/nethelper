@@ -3,6 +3,15 @@ Python module providing simple game networking
 
 This module was originally created to facilitate a class on creating multiplayer games in Pygame Zero. It designed to be simple for beginner programmers to use, and will not be as full featured or efficient as other networking libraries.
 
+## Features
+* Work over the internet or LAN
+* Designed specifically for game networking (...send and receive never blocks, messages are batched)
+* Very simple to use
+* No dependencies or installation. Just download and import one file.
+
+## How it Works
+
+
 ## Starting the Server
 For this module to work, you will require a message relay server. To start the server, simply run the module as a script.
 
@@ -108,7 +117,53 @@ The Wiki docs are generated from the docstrings in the nethelper.py source, so y
 
 ## Examples
 
-See the examples folder for some example games using nethelper.
+As nethelper is designed for use with games, both of these examples uses Pygame Zero. However, nothing in nethelper requires Pygame Zero and it can also be used on its own without any other modules. A message relay server must be running and configured for group "net_demo" for the example to work.
+
+Message sender:
+
+```
+import pgzrun
+from nethelper import NetNode
+
+net = NetNode()
+net.connect('localhost', 'Tom', 'net_demo')
+
+def update():
+    if keyboard.up:
+        net.send_msg('Jerry', 'controls', 'up')
+    elif keyboard.down:
+        net.send_msg('Jerry', 'controls', 'down')
+
+    net.process_send()
+
+pgzrun.go()
+```
+
+Message receiver:
+
+```
+import pgzrun
+from nethelper import NetNode
+
+net = NetNode()
+net.connect('localhost', 'Jerry', 'net_demo')
+
+msg = None
+def update():
+    global msg
+    
+    net.process_recv()
+    msg = net.get_msg('Tom', 'controls')    
+
+def draw():
+    if msg:
+        screen.clear()
+        screen.draw.text(msg, (100,100), color="white")
+
+pgzrun.go()
+```
+
+See the examples folder for more complete examples of games using nethelper.
 
 ## Server Access
 
