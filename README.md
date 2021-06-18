@@ -10,7 +10,13 @@ This module was originally created to facilitate a class on creating multiplayer
 * No dependencies or installation. Just download and import one file.
 
 ## How it Works
+nethelper relies on a server to help relay messages between nodes (...players). This enables it to work across the internet without requiring each user to perform firewall / router configuration or share IP address. You can also run the server within your own LAN, but users outside of your LAN will likely not be able to connect to it.
 
+Each player is a node, and nodes are organized into groups. This means that two students can play a pong game within a "pong" group, while another three students play a maze game within a "maze" group, all using the same server. There are no hardcoded limits to the number of groups, and each group can have up to 253 concurrent players.
+
+Messages are encoded with JSON (...with a custom binary header), and transmitted via TCP to the message relay server. The message relay server will then relay the message to the intended recipient(s).
+
+Each running game can send data to either a specific node within the same group, or to all nodes in the group. The former is useful for clients to send control commands to a game host, while the latter is useful for a game host to send the game state to all clients. See the example folder for examples of games using this pattern.
 
 ## Starting the Server
 For this module to work, you will require a message relay server. To start the server, simply run the module as a script.
