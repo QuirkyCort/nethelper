@@ -45,7 +45,7 @@ def update_host():
         else:
             # Get control info from the client
             controls = net.get_msg(p, 'control')
-        if controls:
+        if controls is not None:
             players[p]['x'] += controls[0]            
             players[p]['y'] += controls[1]            
             players[p]['angle'] = controls[2]

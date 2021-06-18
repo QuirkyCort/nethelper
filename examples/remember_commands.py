@@ -5,22 +5,22 @@ from nethelper import NetNode
 
 WIDTH = 800
 HEIGHT = 600
+SERVER = 'localhost' # <== You may need to change this
+
+# First player must be 'host'. Every one else must use a different value.
+NAME = 'host'  # <== Change this!
+
+# Alternatively, you can use input to ask for the player's name
+NAME = input('What is your name? (first player must be "host") : ')
 
 tank = Actor('tank_blue')
 
 players = {}
+controls = {}
 
 # Connect to the message relay server
-# By setting name to a blank string '', we request the server to
-# assign a random name to us
 net = NetNode()
-net.connect('localhost', '', 'net_demo')
-
-peers = net.get_peers()
-# First player is host
-host_name = peers[0]
-# Get my own server assigned name
-NAME = net.get_name()
+net.connect('localhost', NAME, 'net_demo')
 
 def add_player(name):
     players[name] = {
@@ -28,42 +28,54 @@ def add_player(name):
         'y': 300,
         'angle': 0
     }
+    controls[name] = [0, 0, 0]
 
 def get_controls():
     if keyboard.left:
-        return [-3, 0, 180]
+        return 'left'
     elif keyboard.right:
-        return [3, 0, 0]
+        return 'right'
     elif keyboard.up:
-        return [0, -3, 90]
+        return 'up'
     elif keyboard.down:
-        return [0, 3, 270]
+        return 'down'
+    return ''
 
 def update_host():
     for p in players:
-        if p == host_name:
-            controls = get_controls()
+        if p == 'host':
+            controls[p] = get_controls()
         else:
             # Get control info from the client
-            controls = net.get_msg(p, 'control')
-        if controls is not None:
-            players[p]['x'] += controls[0]            
-            players[p]['y'] += controls[1]            
-            players[p]['angle'] = controls[2]
+            msg = net.get_msg(p, 'control')
+            if msg is not None:
+                controls[p] = msg
+        if controls[p] == 'left':
+            players[p]['x'] -= 3
+            players[p]['angle'] = 180
+        elif controls[p] == 'right':
+            players[p]['x'] += 3
+            players[p]['angle'] = 0
+        elif controls[p] == 'up':
+            players[p]['y'] -= 3
+            players[p]['angle'] = 90
+        elif controls[p] == 'down':
+            players[p]['y'] += 3
+            players[p]['angle'] = 270
 
     # Send data to all other players
     net.send_msg('ALL', 'players', players)
 
 def update_client():
     global players
-    
-    # Get and update tanks position
-    msg = net.get_msg(host_name, 'players')
+
+    # Read and update players position
+    msg = net.get_msg('host', 'players')
     if msg is not None:
         players = msg
 
     # Client controls
-    net.send_msg(host_name, 'control', get_controls())
+    net.send_msg('host', 'control', get_controls())
 
 def update():
     # Run this to receive messages from the server
@@ -73,8 +85,8 @@ def update():
     for peer in net.get_peers():
         if peer not in players:
             add_player(peer)
-            
-    if NAME == host_name:
+
+    if NAME == 'host':
         update_host()
     else:
         update_client()
