@@ -2,3 +2,4 @@ examples/nethelper.py
 sphinx
 __pycache__
 examples/__pycache__
+examples/pgzhelper.py

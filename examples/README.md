@@ -29,3 +29,10 @@ In basic.py, the host will only move the client's tank if they receive a control
 To solve this, the host should remember the last command from the client. If no new commands were received, the host should just continue with the last command. In this example game, we use a new global dictionary **controls** to keep track of the commands from each player.
 
 In this example, we also change the format of the command; instead of sending the change in x/y, we now send a string representing the key press. This prevents the client from cheating by sending a large change in x/y.
+
+## static_objects.py
+In basic.py, the position of the tanks are shared with the clients on every frame. That make senses, as the tanks are often moving. However, many games will have a lot of static objects such as trees, rocks, bushes, etc, which are randomly placed at the start of the game, but don't move after that. While you can send these to the clients on every frame, it is often more efficient to send them only once.
+
+In this example, we introduce the concept of a **request**. There is nothing special about this; it's just a normal **send_msg** like what we have been using. If the client detects that its "rocks" list is empty, it will send a message with the title "request" and the string "rocks" in the content. When the server receives this message, it will send the "rocks" list back to the client.
+
+Using this approach, we can share a world with a large number of static objects, without having to send a lot of data across the network on every frame.
