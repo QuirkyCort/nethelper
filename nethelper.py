@@ -11,6 +11,7 @@ import time
 import argparse
 import random
 import inspect
+import copy
 from collections import OrderedDict
 
 # Socket data format
@@ -364,7 +365,7 @@ class NetNode(Net):
 
         data = {
             'title': title,
-            'content': content,
+            'content': copy.deepcopy(content),
             'queue': queue
         }
 
