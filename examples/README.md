@@ -29,7 +29,7 @@ This example demonstrates how to request for a random name, and how to read this
 ## remember_commands.py
 In basic.py, the host will only move the client's tank if they receive a control command. If no control commands were received, the client's tank will not move for that frame. This can be a problem, as the client may be slightly delayed in sending out their control command (eg. slow network, high CPU load). This will cause the client's tank to pause once every few frames, resulting in slower movements.
 
-To solve this, the host should remember the last command from the client. If no new commands were received, the host should just continue with the last command. In this example game, we use a new global dictionary **controls** to keep track of the commands from each player.
+To solve this, the host should remember the last command from the client. If no new commands were received, the host should just continue with the last command. To do this, we simple tell **get_msg()** not to clear the message from the queue by setting **clear=False**.
 
 In this example, we also change the format of the command; instead of sending the change in x/y, we now send a string representing the key press. This prevents the client from cheating by sending a large change in x/y.
 

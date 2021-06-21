@@ -11,12 +11,11 @@ SERVER = 'localhost' # <== You may need to change this
 NAME = 'host'  # <== Change this!
 
 # Alternatively, you can use input to ask for the player's name
-NAME = input('What is your name? (first player must be "host") : ')
+# NAME = input('What is your name? (first player must be "host") : ')
 
 tank = Actor('tank_blue')
 
 players = {}
-controls = {}
 
 # Connect to the message relay server
 net = NetNode()
@@ -28,7 +27,6 @@ def add_player(name):
         'y': 300,
         'angle': 0
     }
-    controls[name] = [0, 0, 0]
 
 def get_controls():
     if keyboard.left:
@@ -44,24 +42,23 @@ def get_controls():
 def update_host():
     for p in players:
         if p == 'host':
-            controls[p] = get_controls()
+            controls = get_controls()
         else:
-            # Get control info from the client
-            msg = net.get_msg(p, 'control')
-            if msg is not None:
-                controls[p] = msg
-        if controls[p] == 'left':
-            players[p]['x'] -= 3
-            players[p]['angle'] = 180
-        elif controls[p] == 'right':
-            players[p]['x'] += 3
-            players[p]['angle'] = 0
-        elif controls[p] == 'up':
-            players[p]['y'] -= 3
-            players[p]['angle'] = 90
-        elif controls[p] == 'down':
-            players[p]['y'] += 3
-            players[p]['angle'] = 270
+            # Get control info from the client, but don't clear it from the queue
+            controls = net.get_msg(p, 'control', clear=False)
+        if controls is not None:
+            if controls == 'left':
+                players[p]['x'] -= 3
+                players[p]['angle'] = 180
+            elif controls == 'right':
+                players[p]['x'] += 3
+                players[p]['angle'] = 0
+            elif controls == 'up':
+                players[p]['y'] -= 3
+                players[p]['angle'] = 90
+            elif controls == 'down':
+                players[p]['y'] += 3
+                players[p]['angle'] = 270
 
     # Send data to all other players
     net.send_msg('ALL', 'players', players)
