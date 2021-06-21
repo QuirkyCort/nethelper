@@ -59,8 +59,9 @@ from collections import OrderedDict
 #       data: any
 #     }
 #     Request from client to server (eg. to get a list of peers)
-#       type=0, data=None : Disconnect
-#       type=1, date=None : Request peers list (Not implemented)
+#       type=0, data=None   : Disconnect
+#       type=1, data=None   : Request peers list
+#       type=2, data=String : Request name change. data contains name. (not implemented)
 #
 #     = FRAME_TYPE_SYSM: 6
 #     {
@@ -380,7 +381,7 @@ class NetNode(Net):
         '''
         Share all variables using the provided list of names. Variables
         can be local or global. Variables sent using this function is
-        never queued.
+        never queued. This function is magical; learners should avoid it.
 
         Args:
             name: String specifying the recipient name, or "ALL" to send
@@ -404,7 +405,8 @@ class NetNode(Net):
     def update_globals(self, name, variables):
         '''
         Update globals variables using the provided list of names.
-        Variables must be global.
+        Variables must be global. This function is magical; learners
+        should avoid it.
 
         Args:
             name: String specifying the sender name.
