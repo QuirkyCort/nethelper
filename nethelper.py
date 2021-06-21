@@ -341,7 +341,8 @@ class NetNode(Net):
     def send_msg(self, name, title, content, queue=False):
         '''
         Send a message to the output buffer. The message will only be
-        transmitted when process_send() is executed.
+        transmitted when process_send() is executed. This function will
+        make a shallow copy of the content.
 
         Args:
             name: String specifying the recipient name, or "ALL" to send
@@ -365,7 +366,7 @@ class NetNode(Net):
 
         data = {
             'title': title,
-            'content': copy.deepcopy(content),
+            'content': copy.copy(content),
             'queue': queue
         }
 
