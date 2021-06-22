@@ -27,7 +27,7 @@ Letting the players choose their names can lead to name clashes, and if a player
 This example demonstrates how to request for a random name, and how to read this random name. It also demonstrate how to assign the first connected player as the host, without requiring a hardcoded name. Besides that, this example is the same as basic.py
 
 ## remember_commands.py
-In basic.py, the host will only move the client's tank if they receive a control command. If no control commands were received, the client's tank will not move for that frame. This can be a problem, as the client may be slightly delayed in sending out their control command (eg. slow network, high CPU load). This will cause the client's tank to pause once every few frames, resulting in slower movements.
+In basic.py, the host will only move the client's tank if it receives a control command. If no control commands were received, the client's tank will not move for that frame. This can be a problem, as the client may be slightly delayed in sending out their control command (eg. slow network, high CPU load). This will cause the client's tank to pause once every few frames, resulting in slower movements.
 
 To solve this, the host should remember the last command from the client. If no new commands were received, the host should just continue with the last command. To do this, we simple tell **get_msg()** not to clear the message from the queue by setting **clear=False**.
 
