@@ -452,7 +452,7 @@ class NetNode(Net):
         Returns:
             None
         '''
-        self._send_req(self.REQ_TYPE_DISCONNECT)
+        self._send_req(self.REQ_TYPE_DISCONNECT, None)
         self.socket.close()
 
     def _wait_for_connection(self, timeout=5):
