@@ -652,6 +652,8 @@ class NetServer(Net):
             pass
         if client in self.clients:
             self.clients.remove(client)
+        # Inform all in group that one of peers is disconnected
+        self._send_peers_frame(client['group'])
 
     def _accept_connection(self, sock):
         conn, ip = sock.accept()  # Should be ready to read
